@@ -41,6 +41,7 @@ app.use((err, req, res, next) => {
 app.use("/user", userRouter);
 app.use("/mission", missionRouter);
 app.use("/store", storeRouter);
+app.use("/:storeId", storeRouter);
 
 app.listen(app.get("port"), () => {
   console.log(`Example app listening on port ${app.get("port")}`);

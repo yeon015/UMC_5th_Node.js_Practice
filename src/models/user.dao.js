@@ -7,6 +7,10 @@ import {
   getUserID,
   insertUserSql,
   getPreferToUserID,
+  getReviewByReviewIdAtFirst,
+  getReviewByReviewId,
+  getMissionByMissionIdAtFirst,
+  getMissionByMissionId,
 } from "./user.sql.js";
 
 // User 데이터 삽입
@@ -81,6 +85,64 @@ export const getUserPreferToUserID = async (userID) => {
     conn.release();
 
     return prefer;
+  } catch (err) {
+    throw new BaseError(status.PARAMETER_IS_WRONG);
+  }
+};
+
+export const getPreviewReview = async (cursorId, size, memberId) => {
+  try {
+    const conn = await pool.getConnection();
+
+    if (
+      cursorId == "undefined" ||
+      typeof cursorId == "undefined" ||
+      cursorId == null
+    ) {
+      const [reviews] = await pool.query(getReviewByReviewIdAtFirst, [
+        parseInt(memberId),
+        parseInt(size),
+      ]);
+      conn.release();
+      return reviews;
+    } else {
+      const [reviews] = await pool.query(getReviewByReviewId, [
+        parseInt(memberId),
+        parseInt(cursorId),
+        parseInt(size),
+      ]);
+      conn.release();
+      return reviews;
+    }
+  } catch (err) {
+    throw new BaseError(status.PARAMETER_IS_WRONG);
+  }
+};
+
+export const getPreviewMission = async (cursorId, size, memberId) => {
+  try {
+    const conn = await pool.getConnection();
+
+    if (
+      cursorId == "undefined" ||
+      typeof cursorId == "undefined" ||
+      cursorId == null
+    ) {
+      const [missions] = await pool.query(getMissionByMissionIdAtFirst, [
+        parseInt(memberId),
+        parseInt(size),
+      ]);
+      conn.release();
+      return missions;
+    } else {
+      const [missions] = await pool.query(getMissionByMissionId, [
+        parseInt(memberId),
+        parseInt(cursorId),
+        parseInt(size),
+      ]);
+      conn.release();
+      return missions;
+    }
   } catch (err) {
     throw new BaseError(status.PARAMETER_IS_WRONG);
   }
